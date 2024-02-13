@@ -1,4 +1,3 @@
-import exp from "constants";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -9,20 +8,20 @@ const userSchema = new mongoose.Schema({
         max: 20,
         unique: true
     },
-    password: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true,
         max: 50,
         unique: true
     },
+    password: {
+        type: String,
+        required: true
+    },
 },
     { timestamps: true }
 );
 
-const user = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;
