@@ -6,17 +6,17 @@ const SignUp = () => {
         <div className='p-3 max-w-lg mx-auto'>
             <h1 className='text-3xl font-semibold text-center my-5'>Sign Up</h1>
             <form className='flex flex-col gap-3'>
-                <input type='text' placeholder='Username' 
+                <input type='text' placeholder='Username' id='username'
                     className='border 
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <input type='Password' placeholder='Password' 
+                <input type='Password' placeholder='Password' id='password'
                     className='border 
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <input type='email' placeholder='E-Mail' 
+                <input type='email' placeholder='E-Mail' id='email'
                     className='border 
                     p-2 
                     rounded-lg
