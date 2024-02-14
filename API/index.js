@@ -13,6 +13,7 @@ mongoose.connect(process.env.MONGODB).then(() => {
     })
 
 const app = express();
+
 app.use(express.json());
 
 app.listen(3000, () => {
@@ -27,7 +28,7 @@ app.get("/test", (req, res) => {
     );
 });
 
-app.use("/api/users", userRoute);
+app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 
 app.use((err, req, res, next) => {
