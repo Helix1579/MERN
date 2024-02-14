@@ -1,22 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+
 
 const SignUp = () => {
+
+    const [FormData, setFormData] = useState({});
+
+    const handleChanges = (e) => {
+        setFormData({
+            ...FormData,
+            [e.target.id]: e.target.value
+        })
+    }
+    // console.log(FormData);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(FormData);
+
+        await axios
+            .post('http://localhost:3000/api/auth/signup', FormData)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
+
     return (
         <div className='p-3 max-w-lg mx-auto'>
             <h1 className='text-3xl font-semibold text-center my-5'>Sign Up</h1>
-            <form className='flex flex-col gap-3'>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
                 <input type='text' placeholder='Username' id='username'
+                    onChange={handleChanges}
                     className='border 
                     p-2 
                     rounded-lg
                     outline-none'/>
                 <input type='Password' placeholder='Password' id='password'
+                    onChange={handleChanges}
                     className='border 
                     p-2 
                     rounded-lg
                     outline-none'/>
                 <input type='email' placeholder='E-Mail' id='email'
+                    onChange={handleChanges}
                     className='border 
                     p-2 
                     rounded-lg
