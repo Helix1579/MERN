@@ -6,7 +6,6 @@ import axios from 'axios'
 const SignUp = () => {
 
     const [FormData, setFormData] = useState({});
-    // const [Error, setError] = useState(null)
     const [Loading, setLoading] = useState(false)
     const navigate = useNavigate();
 
