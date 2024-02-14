@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 
 const SignUp = () => {
 
     const [FormData, setFormData] = useState({});
+    // const [Error, setError] = useState(null)
+    const [Loading, setLoading] = useState(false)
+    const navigate = useNavigate();
 
     const handleChanges = (e) => {
         setFormData({
@@ -19,13 +22,18 @@ const SignUp = () => {
         e.preventDefault();
         console.log(FormData);
 
+        setLoading(true);
+
         await axios
             .post('http://localhost:3000/api/auth/signup', FormData)
             .then((res) => {
                 console.log(res.data);
+                setLoading(false);
+                navigate('/sign-in')
             })
             .catch((err) => {
                 console.log(err);
+                setLoading(false);
             })
 
     }
@@ -57,7 +65,11 @@ const SignUp = () => {
                     p-2
                     rounded-lg 
                     uppercase
-                    hover:scale-105 duration-300'> Sign Up </button>
+                    hover:scale-105 duration-300'> 
+                    {
+                        Loading ? 'Loading...' : 'Sign Up'
+                    } 
+                </button>
             </form>
             <div className='flex 
                 gap-1
