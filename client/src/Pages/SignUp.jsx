@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import OAuth from '../Components/OAuth';
 
 
 const SignUp = () => {
@@ -47,13 +48,13 @@ const SignUp = () => {
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <input type='Password' placeholder='Password' id='password'
+                <input type='email' placeholder='E-Mail' id='email'
                     onChange={handleChanges}
                     className='border 
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <input type='email' placeholder='E-Mail' id='email'
+                <input type='Password' placeholder='Password' id='password'
                     onChange={handleChanges}
                     className='border 
                     p-2 
@@ -64,11 +65,12 @@ const SignUp = () => {
                     p-2
                     rounded-lg 
                     uppercase
-                    hover:scale-105 duration-300'> 
+                    hover:opacity-95'> 
                     {
                         Loading ? 'Loading...' : 'Sign Up'
                     } 
                 </button>
+                <OAuth />
             </form>
             <div className='flex 
                 gap-1

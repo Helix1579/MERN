@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../Redux/User/UserSlice';
 import axios from 'axios'
+import OAuth from '../Components/OAuth';
 
 const SignIn = () => {
 
@@ -69,6 +70,7 @@ const SignIn = () => {
                         Loading ? 'Loading...' : 'Sign In'
                     } 
                 </button>
+                <OAuth />
             </form>
             <div className='flex 
                 gap-1
