@@ -37,7 +37,7 @@ const Header = () => {
                 
                 <input type='text' placeholder='Search' 
                     className='bg-transparent
-                    pl-3
+                    pl-4 px-1
                     focus:outline-none
                     w-24 sm:w-60
                     '/>
