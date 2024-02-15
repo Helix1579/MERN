@@ -48,13 +48,13 @@ const SignUp = () => {
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <input type='Password' placeholder='Password' id='password'
+                <input type='email' placeholder='E-Mail' id='email'
                     onChange={handleChanges}
                     className='border 
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <input type='email' placeholder='E-Mail' id='email'
+                <input type='Password' placeholder='Password' id='password'
                     onChange={handleChanges}
                     className='border 
                     p-2 
