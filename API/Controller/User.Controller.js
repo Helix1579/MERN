@@ -5,16 +5,19 @@ import bcrypt from "bcryptjs";
 export const test = (req, res) => {
     res.json(
         {
-            message: "API is working !"
+            message: "Test API is working !"
         }
     );
 };
 
 export const updateUser = async (req, res, next) => {
+
     if (req.user.id !== req.params.id) {
         return next(errorHandler(401, "Not Authorized"))
     }
-    try {
+
+    try 
+    {
         if (req.body.password) {
             req.body.password = bcrypt.hashSync(req.body.password, 10);
         }
@@ -28,9 +31,9 @@ export const updateUser = async (req, res, next) => {
             }
         }, { new: true });
 
-        // const { password, ...rest } = updatedUser._doc;
+        const { password, ...rest } = updatedUser._doc;
 
-        res.status(200).json(updatedUser)
+        res.status(200).json(rest)
 
     } catch (error) {
         next(error)
