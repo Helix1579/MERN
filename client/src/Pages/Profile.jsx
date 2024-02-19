@@ -8,7 +8,7 @@ import axios from 'axios'
 
 const Profile = () => {
 
-    const { currentUser } = useSelector((state) => state.user)
+    const { currentUser, loading, error } = useSelector((state) => state.user)
     const fileRef = useRef(null)
     const [File, setFile] = useState(undefined)
     const [FilePercent, setFilePercent] = useState(0)
@@ -54,7 +54,6 @@ const Profile = () => {
             ...FormData,
             [e.target.id]: e.target.value
         });
-        // console.log(FormData);
     }
 
     const handleSubmit = async (e) => {
@@ -65,16 +64,17 @@ const Profile = () => {
         await axios
             .post(`http://localhost:3000/api/user/update/${currentUser._id}`,
             FormData, {
-                withCredentials: true,
+                withCredentials: true
             })
             .then((res) => {
-                console.log(res.data);
-                setUpdateSuccess(true);
+                console.log(res.data.message);
                 dispatch(updateUserSuccess(res.data));
+                setUpdateSuccess(true);
             })
-            .catch((err) => {
-                console.log(err);
-                dispatch(updateUserFailure(err.message));
+            .catch((error) => {
+                console.log(error.response.data);
+                setUpdateSuccess(false);
+                dispatch(updateUserFailure(error.response.data.message));
             })
     }
 
@@ -137,12 +137,14 @@ const Profile = () => {
                     onChange={handleChange}
                     className='border p-2 pl-3 rounded-lg outline-none'/>
 
-                <button className='bg-slate-600 
+                <button disabled={loading} className='bg-slate-600 
                     text-white
                     uppercase
                     rounded-lg p-1
                     hover:opacity-95
-                    disabled:opacity-80'>Update</button>
+                    disabled:opacity-80'>
+                        {loading ? "Loading..." : "Update"}
+                </button>
             </form>
 
             <div className='flex justify-between mt-5'>
@@ -151,9 +153,18 @@ const Profile = () => {
                 <span className='text-red-600
                     cursor-pointer'>Sign Out</span>
             </div>
-            <p className='text-center mt-5 text-green-600'>
+            {
+
+            }
+
+            {/* <p className='text-center mt-5 text-green-600'>
                 {UpdateSuccess ? "Profile Updated" : ""}
-            </p>
+            </p> */}
+            {UpdateSuccess && <p className='text-center mt-5 text-green-600'>Profile Updated</p>}
+            {/* <p className='text-center mt-5 text-red-600'>
+                {error ? error : ""}
+            </p> */}
+            {error && <p className='text-center mt-5 text-red-600'>{error}</p>}
         </div>
     )
 }

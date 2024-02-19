@@ -8,7 +8,7 @@ import OAuth from '../Components/OAuth';
 const SignIn = () => {
 
     const [ FormData, setFormData ] = useState({});
-    const { Loading } = useSelector((state) => state.user);
+    const { loading, error } = useSelector((state) => state.user);
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -25,7 +25,6 @@ const SignIn = () => {
         e.preventDefault();
         console.log(FormData);
 
-        // setLoading(true);
         dispatch(signInStart());
 
         await axios
@@ -35,43 +34,15 @@ const SignIn = () => {
 
             })
             .then((res) => {
-                console.log(res.data);
+                console.log(res);
                 dispatch(signInSuccess(res.data));
-                // setLoading(false);
                 navigate('/')
             })
             .catch((err) => {
-                console.log(err);
-                // setLoading(false);
-                dispatch(signInFailure(err.message));
+                console.log(err.response);
+                dispatch(signInFailure(err.response.data.message));
             })
     }
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     console.log(FormData);
-    //     try {
-    //       dispatch(signInStart());
-    //       const res = await fetch('http://localhost:3000/api/auth/signin', {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(FormData),
-    //       });
-    //       const data = await res.json();
-    //       console.log(data);
-    //       if (data.success === false) {
-    //         dispatch(signInFailure(data.message));
-    //         return;
-    //       }
-    //       dispatch(signInSuccess(data));
-    //       navigate('/');
-    //     } catch (error) {
-    //       dispatch(signInFailure(error.message));
-    //     }
-    //   };
-
 
     return (
         <div className='p-3 max-w-lg mx-auto'>
@@ -89,14 +60,16 @@ const SignIn = () => {
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <button className='bg-slate-600
+                <button 
+                    disabled={loading} 
+                    className='bg-slate-600
                     text-white 
                     p-2
                     rounded-lg 
                     uppercase
                     hover:scale-105 duration-300'> 
                     {
-                        Loading ? 'Loading...' : 'Sign In'
+                        loading ? 'Loading...' : 'Sign In'
                     } 
                 </button>
                 <OAuth />
@@ -109,6 +82,7 @@ const SignIn = () => {
                     <span className='text-blue-500'>Sign Up</span>
                 </Link>
             </div>
+            {error && <p className='text-red-500 mt-5'>{error}</p>}
         </div>
     )
 }

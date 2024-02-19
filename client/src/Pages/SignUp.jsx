@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import OAuth from '../Components/OAuth';
 
-
 const SignUp = () => {
 
     const [FormData, setFormData] = useState({});
     const [Loading, setLoading] = useState(false)
+    const [Error, setError] = useState(null)
     const navigate = useNavigate();
 
     const handleChanges = (e) => {
@@ -26,13 +26,14 @@ const SignUp = () => {
 
         await axios
             .post('http://localhost:3000/api/auth/signup', FormData)
-            .then((res) => {
-                console.log(res.data);
+            .then(() => {
                 setLoading(false);
+                setError(null);
                 navigate('/sign-in')
             })
             .catch((err) => {
                 console.log(err);
+                setError(err.response.data.message);
                 setLoading(false);
             })
 
@@ -60,7 +61,7 @@ const SignUp = () => {
                     p-2 
                     rounded-lg
                     outline-none'/>
-                <button className='bg-slate-600
+                <button disabled={Loading} className='bg-slate-600
                     text-white 
                     p-2
                     rounded-lg 
@@ -81,6 +82,7 @@ const SignUp = () => {
                     <span className='text-blue-500'>Sign In</span>
                 </Link>
             </div>
+            {Error && <p className='text-red-500'>{Error}</p>}
         </div>
     )
 }
