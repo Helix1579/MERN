@@ -56,7 +56,7 @@ const Profile = () => {
         });
     }
 
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         console.log(FormData);
         dispatch(updateUserStart());
@@ -78,6 +78,10 @@ const Profile = () => {
             })
     }
 
+    const handleDelete = async () => {
+        
+    }
+
 
     return (
         <div className='p-3 max-w-lg mx-auto'>
@@ -87,7 +91,7 @@ const Profile = () => {
                 my-7'>
                 Profile</h1>
 
-            <form onSubmit={handleSubmit}
+            <form onSubmit={handleUpdate}
                 className='flex flex-col text-center gap-4'>
 
                 <input type='file' 
@@ -148,7 +152,7 @@ const Profile = () => {
             </form>
 
             <div className='flex justify-between mt-5'>
-                <span className='text-red-600
+                <span onClick={handleDelete} className='text-red-600
                     cursor-pointer'>Delete Account?</span>
                 <span className='text-red-600
                     cursor-pointer'>Sign Out</span>
