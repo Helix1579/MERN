@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
+import { updateUserStart, updateUserSuccess, updateUserFailure } from '../Redux/User/UserSlice'
+import { useDispatch } from 'react-redux'
+import axios from 'axios'
 
 const Profile = () => {
 
@@ -11,20 +14,23 @@ const Profile = () => {
     const [FilePercent, setFilePercent] = useState(0)
     const [FileUpladError, setFileUpladError] = useState(false)
     const [FormData, setFormData] = useState({})
+    const [UpdateSuccess, setUpdateSuccess] = useState(false)
+    const dispatch = useDispatch()
 
-    console.log(FormData);
-    console.log(FilePercent);
-    console.log(FileUpladError);
+    // console.log(FormData);
+    // console.log(FilePercent);
+    // console.log(FileUpladError);
     // console.log(File);
 
     useEffect(() => {
         if (File) {
             handleFileUpload(File);
         } 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [File])
 
     const handleFileUpload = (file) => {
-        const storage = getStorage(app); 
+        const storage = getStorage(app);
         const fileName = new Date().getTime() + file.name;
         const storageRef = ref(storage, fileName);
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -42,7 +48,37 @@ const Profile = () => {
             });
         }
     )}
-        
+
+    const handleChange = (e) => {
+        setFormData({
+            ...FormData,
+            [e.target.id]: e.target.value
+        });
+        // console.log(FormData);
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(FormData);
+        dispatch(updateUserStart());
+
+        await axios
+            .post(`http://localhost:3000/api/user/update/${currentUser._id}`,
+            FormData, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log(res.data);
+                setUpdateSuccess(true);
+                dispatch(updateUserSuccess(res.data));
+            })
+            .catch((err) => {
+                console.log(err);
+                dispatch(updateUserFailure(err.message));
+            })
+    }
+
+
     return (
         <div className='p-3 max-w-lg mx-auto'>
             <h1 className=' text-3xl 
@@ -51,7 +87,8 @@ const Profile = () => {
                 my-7'>
                 Profile</h1>
 
-            <form className='flex flex-col text-center gap-4'>
+            <form onSubmit={handleSubmit}
+                className='flex flex-col text-center gap-4'>
 
                 <input type='file' 
                     ref={fileRef} hidden 
@@ -80,11 +117,24 @@ const Profile = () => {
                     }
                 </p>
                 
-                <input type="text" placeholder='Username' id='username'
+                <input type="text"
+                    placeholder='Username'
+                    id='username'
+                    defaultValue={currentUser.username} 
+                    onChange={handleChange}
                     className='border p-2 pl-3 rounded-lg outline-none'/>
-                <input type="text" placeholder='E-Mail' id='email'
+
+                <input type="text"
+                    placeholder='E-Mail'
+                    id='email'
+                    defaultValue={currentUser.email}
+                    onChange={handleChange}
                     className='border p-2 pl-3 rounded-lg outline-none'/>
-                <input type="text" placeholder='Password' id='password'
+
+                <input type="password"
+                    placeholder='Password'
+                    id='password'
+                    onChange={handleChange}
                     className='border p-2 pl-3 rounded-lg outline-none'/>
 
                 <button className='bg-slate-600 
@@ -94,12 +144,16 @@ const Profile = () => {
                     hover:opacity-95
                     disabled:opacity-80'>Update</button>
             </form>
+
             <div className='flex justify-between mt-5'>
                 <span className='text-red-600
                     cursor-pointer'>Delete Account?</span>
                 <span className='text-red-600
                     cursor-pointer'>Sign Out</span>
             </div>
+            <p className='text-center mt-5 text-green-600'>
+                {UpdateSuccess ? "Profile Updated" : ""}
+            </p>
         </div>
     )
 }
