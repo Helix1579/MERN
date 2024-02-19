@@ -2,7 +2,17 @@ import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../Redux/User/UserSlice'
+import { 
+    updateUserStart,
+    updateUserSuccess,
+    updateUserFailure,
+    deleteUserStart,
+    deleteUserSuccess,
+    deleteUserFailure,
+    signOutUserStart,
+    signOutUserSuccess,
+    signOutUserFailure,
+} from '../Redux/User/UserSlice'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 
@@ -56,25 +66,63 @@ const Profile = () => {
         });
     }
 
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         console.log(FormData);
         dispatch(updateUserStart());
 
         await axios
-            .post(`http://localhost:3000/api/user/update/${currentUser._id}`,
+            .patch(`http://localhost:3000/api/user/update/${currentUser._id}`,
             FormData, {
                 withCredentials: true
             })
             .then((res) => {
-                console.log(res.data.message);
+                console.log(res.data);
                 dispatch(updateUserSuccess(res.data));
                 setUpdateSuccess(true);
             })
             .catch((error) => {
-                console.log(error.response.data);
+                console.log(error.response);
                 setUpdateSuccess(false);
-                dispatch(updateUserFailure(error.response.data.message));
+                dispatch(updateUserFailure(error.response));
+            })
+    }
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+
+        dispatch(deleteUserStart());
+
+        await axios
+            .delete(`http://localhost:3000/api/user/delete/${currentUser._id}`,
+            {
+                withCredentials: true
+            })
+            .then((res) => {
+                console.log(res);
+                dispatch(deleteUserSuccess());
+            })
+            .catch((error) => {
+                console.log(error);
+                dispatch(deleteUserFailure(error.response));
+            })
+    }
+
+    const handleSignOut = async() => {
+        
+        dispatch(signOutUserStart());
+
+        await axios
+            .get(`http://localhost:3000/api/auth/signout`, {
+                withCredentials: true
+            })
+            .then((res) => {
+                console.log(res.data);
+                dispatch(signOutUserSuccess());
+            })
+            .catch((error) => {
+                console.log(error);
+                dispatch(signOutUserFailure(error.response));
             })
     }
 
@@ -87,7 +135,7 @@ const Profile = () => {
                 my-7'>
                 Profile</h1>
 
-            <form onSubmit={handleSubmit}
+            <form onSubmit={handleUpdate}
                 className='flex flex-col text-center gap-4'>
 
                 <input type='file' 
@@ -137,7 +185,9 @@ const Profile = () => {
                     onChange={handleChange}
                     className='border p-2 pl-3 rounded-lg outline-none'/>
 
-                <button disabled={loading} className='bg-slate-600 
+                <button 
+                    // disabled={loading} 
+                    className='bg-slate-600 
                     text-white
                     uppercase
                     rounded-lg p-1
@@ -148,9 +198,9 @@ const Profile = () => {
             </form>
 
             <div className='flex justify-between mt-5'>
-                <span className='text-red-600
+                <span onClick={handleDelete} className='text-red-600
                     cursor-pointer'>Delete Account?</span>
-                <span className='text-red-600
+                <span onClick={handleSignOut} className='text-red-600
                     cursor-pointer'>Sign Out</span>
             </div>
             {

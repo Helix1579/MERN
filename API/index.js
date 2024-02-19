@@ -23,10 +23,11 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Credentials', 'true'); // Allow credentials
-
+    
     // Respond to preflight requests
     if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PATCH'); // Add PATCH method specifically for preflight requests
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+        // res.header('Access-Control-Allow-Methods', 'DELETE'); // Add PATCH method specifically for preflight requests
         res.sendStatus(200);
     } else {
         next();
