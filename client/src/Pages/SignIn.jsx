@@ -29,7 +29,11 @@ const SignIn = () => {
         dispatch(signInStart());
 
         await axios
-            .post('http://localhost:3000/api/auth/signin', FormData)
+            .post('http://localhost:3000/api/auth/signin', FormData,
+            {
+                withCredentials: true
+
+            })
             .then((res) => {
                 console.log(res.data);
                 dispatch(signInSuccess(res.data));
@@ -41,8 +45,33 @@ const SignIn = () => {
                 // setLoading(false);
                 dispatch(signInFailure(err.message));
             })
-
     }
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     console.log(FormData);
+    //     try {
+    //       dispatch(signInStart());
+    //       const res = await fetch('http://localhost:3000/api/auth/signin', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(FormData),
+    //       });
+    //       const data = await res.json();
+    //       console.log(data);
+    //       if (data.success === false) {
+    //         dispatch(signInFailure(data.message));
+    //         return;
+    //       }
+    //       dispatch(signInSuccess(data));
+    //       navigate('/');
+    //     } catch (error) {
+    //       dispatch(signInFailure(error.message));
+    //     }
+    //   };
+
 
     return (
         <div className='p-3 max-w-lg mx-auto'>
