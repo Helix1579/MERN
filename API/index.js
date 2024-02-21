@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoute from "./Routes/UserRoute.js";
-import authRoute from "./Routes/AuthRoute.js"
+import authRoute from "./Routes/AuthRoute.js";
+import listingRoute from "./Routes/ListingRoute.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -48,6 +49,7 @@ app.use(cookieParser());
     
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/listing", listingRoute);
 
 
 app.use((err, req, res, next) => {
