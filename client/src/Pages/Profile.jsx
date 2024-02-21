@@ -47,18 +47,19 @@ const Profile = () => {
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         uploadTask.on('state_changed', (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setFilePercent(Math.round(progress));
-        },
-        (error) => {
-            setFileUpladError(true);
-        },
-        () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                setFormData({...FormData, avatar: downloadURL});
-            });
-        }
-    )}
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setFilePercent(Math.round(progress));
+            },
+            (error) => {
+                setFileUpladError(true);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setFormData({...FormData, avatar: downloadURL});
+                });
+            }
+        )
+    }
 
     const handleChange = (e) => {
         setFormData({

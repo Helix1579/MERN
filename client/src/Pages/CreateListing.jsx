@@ -1,6 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { app } from '../firebase';
 
 const CreateListing = () => {
+
+    const [Files, setFiles] = useState([]);
+    const [FormData, setFormData] = useState({ imageUrls: [], });
+    const [ImageUploadError, setImageUploadError] = useState(false);
+    const [Uploading, setUploading] = useState(false);
+
+    console.log(FormData);
+
+    const handleUpload = async (e) => {
+
+        if (Files.length > 0 && Files.length + FormData.imageUrls.length < 7) {
+
+            const promise = [];
+            setUploading(true);
+            setImageUploadError(false);
+
+            for (let i = 0; i < Files.length; i++)
+            {
+                await promise.push(storeImage(Files[i]));
+            }
+            
+            Promise.all(promise).then((urls) => {
+                setFormData({ ...FormData, imageUrls: FormData.imageUrls.concat(urls) });
+                setUploading(false);
+                setImageUploadError(false);
+            }).catch((error) => {
+                setUploading(false);
+                setImageUploadError('Error Uploading Images! Please try again!');
+            });
+        } else {
+            setImageUploadError('Max 6 Images are allowed!');
+            setUploading(false);
+        }
+    }
+
+    const storeImage = async (file) => {
+
+        return new Promise((resolve, reject) => {
+
+            const storage = getStorage(app);
+            const fileName = new Date().getTime() + file.name;
+            const storageRef = ref(storage, fileName);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            
+            uploadTask.on(
+                'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+            },
+            (error) => {
+                reject(error);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    resolve(downloadURL);
+                });
+            });
+        });
+    }
+
     return (
         <main className='p-3
             max-w-4xl
@@ -124,9 +187,19 @@ const CreateListing = () => {
                         </span>
                     </p>
                     <div className="flex gap-4">
-                        <input type="file" id="image" accept='image/*' multiple max='6'
-                            className='p-2 rounded-lg border border-gray-600 w-full'/>
-                        <button 
+                        <input multiple 
+                            type="file"
+                            id="image" 
+                            accept='image/*' 
+                            onChange={(e) => { setFiles(e.target.files) }}
+                            className='p-2 
+                                rounded-lg 
+                                border 
+                                border-gray-600 
+                                w-full'/>
+                        <button type='button'
+                            onClick={handleUpload}
+                            // disabled={Uploading}
                             className='p-2 
                                 text-green-500
                                 rounded-lg
@@ -135,9 +208,35 @@ const CreateListing = () => {
                                 uppercase
                                 hover:shadow-lg
                                 disabled:opacity-80'>
-                            Upload
+                            { Uploading ? 'Uploading...' : 'Upload'}
                         </button>
                     </div>
+                    <p className='text-red-600'>
+                        { ImageUploadError && ImageUploadError}
+                    </p>
+                    {
+                        FormData.imageUrls.length > 0 && FormData.imageUrls.map((url, index) => (
+                            <div 
+                                className="flex p-2
+                                justify-between
+                                items-center
+                                border
+                                border-black
+                                rounded-xl">
+                                <img 
+                                    key={index} 
+                                    src={url} 
+                                    alt='uploaded' 
+                                    className='w-40 h-32
+                                    rounded-lg'/>
+                                <button 
+                                    type='button' 
+                                    className='text-red-600'>
+                                    Remove
+                                </button>
+                            </div>
+                        ))
+                    }
                     <button 
                         className='bg-slate-600 
                         text-white
