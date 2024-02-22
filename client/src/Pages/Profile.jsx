@@ -14,6 +14,7 @@ import {
     signOutUserFailure,
 } from '../Redux/User/UserSlice'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 const Profile = () => {
@@ -46,18 +47,19 @@ const Profile = () => {
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         uploadTask.on('state_changed', (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setFilePercent(Math.round(progress));
-        },
-        (error) => {
-            setFileUpladError(true);
-        },
-        () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                setFormData({...FormData, avatar: downloadURL});
-            });
-        }
-    )}
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setFilePercent(Math.round(progress));
+            },
+            (error) => {
+                setFileUpladError(true);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setFormData({...FormData, avatar: downloadURL});
+                });
+            }
+        )
+    }
 
     const handleChange = (e) => {
         setFormData({
@@ -186,7 +188,7 @@ const Profile = () => {
                     className='border p-2 pl-3 rounded-lg outline-none'/>
 
                 <button 
-                    // disabled={loading} 
+                    disabled={loading} 
                     className='bg-slate-600 
                     text-white
                     uppercase
@@ -195,6 +197,15 @@ const Profile = () => {
                     disabled:opacity-80'>
                         {loading ? "Loading..." : "Update"}
                 </button>
+                <Link to={'/create-listing'}
+                    className='bg-green-600 
+                    text-white
+                    uppercase
+                    rounded-lg p-1
+                    hover:opacity-95
+                    disabled:opacity-80'>
+                        Create Listing
+                </Link>
             </form>
 
             <div className='flex justify-between mt-5'>
