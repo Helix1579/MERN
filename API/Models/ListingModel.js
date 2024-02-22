@@ -25,12 +25,13 @@ const listingSchema = new mongoose.Schema({
     },
     discountPrice: {
         type: Number,
+        required: true
     },
-    bathrooms:{
+    bathroom:{
         type: Number,
         required: true
     },
-    bedrooms:{
+    bedroom:{
         type: Number,
         required: true
     },
