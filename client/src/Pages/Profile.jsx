@@ -193,7 +193,7 @@ const Profile = () => {
                     disabled:opacity-80'>
                         {loading ? "Loading..." : "Update"}
                 </button>
-                <Link to={'/create-listing'}
+                <Link to={'/createListing'}
                     className='bg-green-600 
                     text-white
                     uppercase

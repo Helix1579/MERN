@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
@@ -10,32 +10,25 @@ const ShowListing = () => {
     const [UserListing, setUserListing] = useState([])
     const [ListingError, setListingError] = useState(false)
 
-    const handleShowListing = async () => {
-        console.log('Show Listing')
+    useEffect(() => {
+        const fetchListings = async() => {
 
-        try {
             await axios
-                .get(`http://localhost:3000/api/user/listing/${currentUser._id}`,
-                {
-                    withCredentials: true
-                })
-                .then((res) => {
-                    console.log(res.data);
-                    setUserListing(res.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                    setListingError(error.response.data);
-                })
-            
-        } catch (error) {
-            setListingError(true);
+            .get(`http://localhost:3000/api/user/listing/${currentUser._id}`,
+            {
+                withCredentials: true
+            })
+            .then((res) => {
+                console.log(res.data);
+                setUserListing(res.data);
+            })
+            .catch((error) => {
+                console.log(error.response);
+                setListingError(error.response.data);
+            })
         }
-    }
-
-    const handleEditListing = async (listingId) => {
-        console.log('Edit Listing')
-    }
+        fetchListings();
+    }, [])
 
     const handleDeleteListing = async (listingId) => {
         console.log('Delete Listing')
@@ -74,15 +67,6 @@ const ShowListing = () => {
                
             <div className="flex flex-col
                 justify-between">
-                <button className='bg-blue-500 
-                    hover:bg-blue-700 
-                    text-white 
-                    font-bold 
-                    py-2 px-4 mb-4
-                    rounded' 
-                    onClick={handleShowListing}> 
-                    Show Listing
-                </button>
                 {ListingError && <p className='text-red-500 text-xs mt-2'>{ListingError}</p>}
 
                 {UserListing && UserListing.length > 0 && 
@@ -113,14 +97,16 @@ const ShowListing = () => {
                         <div className="flex flex-col
                             items-center">
                                 
-                            <button onClick={() => handleEditListing(listing._id)}
-                                className="uppercase
-                                w-11 h-11 flex 
-                                items-center 
-                                justify-center">
-                                    <MdModeEdit size='24px'/>
-                            </button>
-                                
+                            <Link to={`/updateListing/${listing._id}`}>
+                                <button
+                                    className="uppercase
+                                    w-11 h-11 flex 
+                                    items-center 
+                                    justify-center">
+                                        <MdModeEdit size='24px'/>
+                                </button>
+                            </Link>
+
                             <button onClick={() => handleDeleteListing(listing._id)}
                                 className="uppercase 
                                 w-11 h-11 flex 
