@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import { MdDeleteForever, MdOutlineUploadFile } from "react-icons/md";
 import axios from 'axios';
 import {useSelector} from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-const CreateListing = () => {
+const UpdateListing = () => {
 
     const [Files, setFiles] = useState([]);
     const [FormData, setFormData] = useState({ 
@@ -29,8 +29,31 @@ const CreateListing = () => {
     const [Error, setError] = useState(false)
     const [Loading, setLoading] = useState(false)
     const navigate = useNavigate();
+    const params = useParams();
 
     // console.log(FormData);
+
+    // Getting Listing Details
+    useEffect(() => {
+        const fetchListings = async() => {
+            const listingId = params.listingId;
+
+            await axios
+                .get(`http://localhost:3000/api/listing/get/${listingId}`,
+                {
+                    withCredentials: true
+                })
+                .then((res) => {
+                    console.log(res.data);
+                    setFormData(res.data);
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    setError(error.response.data.message);
+                })
+    }
+        fetchListings();
+    }, [])
 
     const handleUpload = async (e) => {
         
@@ -118,7 +141,7 @@ const CreateListing = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(FormData);
+        // console.log(FormData);
 
         setLoading(true);
 
@@ -134,7 +157,7 @@ const CreateListing = () => {
         }
 
         await axios
-            .post('http://localhost:3000/api/listing/create',
+            .patch('http://localhost:3000/api/listing/update/' + params.listingId,
             {
                 ...FormData,
                 userRef: currentUser._id
@@ -144,6 +167,7 @@ const CreateListing = () => {
 
             })
             .then((response) => {
+                console.log(response);
                 setLoading(false);
                 setError(false);
                 navigate(`/listing/${response.data._id}`);
@@ -163,7 +187,7 @@ const CreateListing = () => {
                 className='text-3xl 
                 font-semibold 
                 text-center my-8'>
-                    Create Listing
+                    Update Details
             </h1>
 
             <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
@@ -243,7 +267,7 @@ const CreateListing = () => {
                         </div>
                     </div>
 
-                    <div className='flex gap-6 flex-wrap text-sm'>
+                    <div className='flex gap-6 flex-wrap text-sm mt-2'>
                         <div className='flex gap-1 items-center'>
                             <input required
                                 type='number' 
@@ -275,7 +299,7 @@ const CreateListing = () => {
                         <div className='flex gap-1 items-center'>
                             <input required
                                 type='number'
-                                className='p-1 w-28
+                                className='p-1 w-24
                                     rounded-xl
                                     outline-none
                                     text-center'
@@ -292,7 +316,7 @@ const CreateListing = () => {
                             <div className='flex gap-1 items-center'>
                                 <input required
                                     type='number'
-                                    className='p-1 w-28
+                                    className='p-1 w-24
                                         rounded-xl
                                         outline-none
                                         text-center'
@@ -309,8 +333,7 @@ const CreateListing = () => {
                     </div>
 
                 </div>
-
-                {/* Image Upload */}
+                {/* Image Upload */}    
                 <div className="flex flex-col flex-1 gap-4">
                     <p className='font-semibold'>Images : 
                         <span className='font-normal text-gray-500 ml-2'>
@@ -378,7 +401,7 @@ const CreateListing = () => {
                         rounded-lg p-1
                         hover:opacity-95
                         disabled:opacity-80'>
-                        {Loading ? 'Loading...' : 'Create Listing'}
+                        {Loading ? 'Loading...' : 'Update Details'}
                     </button>
                     {Error && <p className='text-red-600'>{Error}</p>}
                 </div>
@@ -387,4 +410,4 @@ const CreateListing = () => {
     )
 }
 
-export default CreateListing
+export default UpdateListing
