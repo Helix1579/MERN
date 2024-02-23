@@ -33,6 +33,35 @@ const ShowListing = () => {
         }
     }
 
+    const handleEditListing = async (listingId) => {
+        console.log('Edit Listing')
+    }
+
+    const handleDeleteListing = async (listingId) => {
+        console.log('Delete Listing')
+        
+        try
+        {
+            await axios
+                .delete(`http://localhost:3000/api/listing/delete/${listingId}`,
+                {
+                    withCredentials: true
+                })
+                .then((res) => {
+                    console.log(res.data);
+                    setUserListing((prev) => prev.filter((listing) => listing._id !== listingId));
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    setListingError(error.response.data);
+                })
+        }
+        catch (error) {
+            console.log(error.response);
+            setListingError(true);
+        }
+    }
+
     return (
         <div className='p-3 max-w-lg mx-auto'>
             <h1 className=' text-3xl 
@@ -84,14 +113,16 @@ const ShowListing = () => {
                         <div className="flex flex-col
                             items-center">
                                 
-                            <button className="uppercase
+                            <button onClick={() => handleEditListing(listing._id)}
+                                className="uppercase
                                 w-11 h-11 flex 
                                 items-center 
                                 justify-center">
                                     <MdModeEdit size='24px'/>
                             </button>
                                 
-                            <button className="uppercase 
+                            <button onClick={() => handleDeleteListing(listing._id)}
+                                className="uppercase 
                                 w-11 h-11 flex 
                                 items-center 
                                 justify-center">

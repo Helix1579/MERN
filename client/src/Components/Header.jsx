@@ -61,6 +61,20 @@ const Header = () => {
                         hover:underline'>
                             About </li>
                 </Link>
+                
+                {currentUser ? 
+                    (
+                        <Link to='/userListing'>
+
+                                <li className='
+                                hidden
+                                sm:inline
+                                text-slate-600
+                                hover:underline'>
+                                    MyListing </li>
+                        </Link>
+                    ) : ("")
+                }
 
                 <Link to='/profile'>
                     {currentUser ? (
