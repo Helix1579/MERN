@@ -28,11 +28,6 @@ const Profile = () => {
     const [UpdateSuccess, setUpdateSuccess] = useState(false)
     const dispatch = useDispatch()
 
-    // console.log(FormData);
-    // console.log(FilePercent);
-    // console.log(FileUpladError);
-    // console.log(File);
-
     useEffect(() => {
         if (File) {
             handleFileUpload(File);
@@ -134,6 +129,7 @@ const Profile = () => {
             <h1 className=' text-3xl 
                 font-semibold 
                 text-center
+                uppercase
                 my-7'>
                 Profile</h1>
 
@@ -206,6 +202,15 @@ const Profile = () => {
                     disabled:opacity-80'>
                         Create Listing
                 </Link>
+                <Link to={'/userListing'}
+                    className='bg-green-600 
+                    text-white
+                    uppercase
+                    rounded-lg p-1
+                    hover:opacity-95
+                    disabled:opacity-80'>
+                        Show Listings
+            </Link>
             </form>
 
             <div className='flex justify-between mt-5'>
@@ -214,18 +219,12 @@ const Profile = () => {
                 <span onClick={handleSignOut} className='text-red-600
                     cursor-pointer'>Sign Out</span>
             </div>
-            {
 
-            }
-
-            {/* <p className='text-center mt-5 text-green-600'>
-                {UpdateSuccess ? "Profile Updated" : ""}
-            </p> */}
             {UpdateSuccess && <p className='text-center mt-5 text-green-600'>Profile Updated</p>}
-            {/* <p className='text-center mt-5 text-red-600'>
-                {error ? error : ""}
-            </p> */}
+
             {error && <p className='text-center mt-5 text-red-600'>{error}</p>}
+            
+
         </div>
     )
 }
