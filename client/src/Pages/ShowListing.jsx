@@ -28,6 +28,8 @@ const ShowListing = () => {
             })
         }
         fetchListings();
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleDeleteListing = async (listingId) => {
