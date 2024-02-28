@@ -1,4 +1,5 @@
 import User from "../Models/UserModel.js";
+import Listing from "../Models/ListingModel.js";
 import { errorHandler } from "../Utilities/error.js";
 import bcrypt from "bcryptjs";
 
@@ -55,5 +56,40 @@ export const deleteUser = async (req, res, next) => {
 
     } catch (error) {
         next(error);
+    }
+}
+
+export const getUserListings = async (req, res, next) => {
+
+    if (req.user.id === req.params.id)
+    {
+        try {
+            console.log(req.user);
+            const listings = await Listing.find({userRef : req.params.id});
+            res.status(200).json(listings);
+
+        } catch (error) {
+            next(error);
+        }
+    }
+    else
+    {
+        next(errorHandler(401, 'Not Authorized'));
+    }
+}
+
+export const getUser = async (req, res, next) => {
+    // console.log(req.user);
+
+    if (req.user.id === req.params.id)
+    {
+        try {
+            const user = await User.findById(req.params.id);
+            const { password, ...rest } = user._doc;
+            res.status(200).json(rest);
+        }
+        catch (error) {
+            next(error);
+        }
     }
 }
