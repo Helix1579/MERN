@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 import SwiperCore from 'swiper';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
-import { FaBath, FaBed, FaChair, FaMapMarkedAlt, FaMapMarkerAlt, FaParking, FaShare } from 'react-icons/fa';
+import axios from 'axios';
+import { FaBath, FaBed, FaChair, FaMapMarkedAlt, FaParking, FaShare } from 'react-icons/fa';
+import Contact from '../Components/Contact';
 
 const Listing = () => {
     SwiperCore.use([Navigation]);
@@ -13,7 +15,12 @@ const Listing = () => {
     const [Loading, setLoading] = useState(false)
     const [Error, setError] = useState(false)
     const [copied, setCopied] = useState(false);
+    const [contact, setContact] = useState(false)
+    const { currentUser} = useSelector((state) => state.user);
     const params = useParams();
+
+    // console.log(currentUser._id, Listing?.userRef);
+    // console.log("Listing : ", Listing );
 
     useEffect(() => {
         const fetchListings = async() => {
@@ -23,12 +30,12 @@ const Listing = () => {
             setError(false);
 
             await axios
-                .get(`http://localhost:3000/api/Listing/get/${listingId}`,
+                .get(`http://localhost:3000/api/listing/get/${listingId}`,
                 {
                     withCredentials: true
                 })
                 .then((res) => {
-                    console.log(res.data);
+                    // console.log(res.data);
                     setListing(res.data);
                     setLoading(false);
                     setError(false);
@@ -62,10 +69,13 @@ const Listing = () => {
                         <Swiper navigation>
                             {Listing.imageUrls.map((url) => (
                                 <SwiperSlide key={url}>
-                                    <div className="h-[550px]"
-                                        style={{
-                                            background: `url(${url}) center no-repeat`,
-                                            backgroundSize:'cover'}}></div>
+                                    <div
+                                    className='h-[550px]'
+                                    style={{
+                                        background: `url(${url}) center no-repeat`,
+                                        backgroundSize: 'contain',
+                                    }}
+                                    ></div>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
@@ -113,15 +123,16 @@ const Listing = () => {
                             </p>
                             <p className='flex 
                                 items-center 
-                                mt-6 gap-2 
+                                mt-6 gap-2
                                 text-slate-600  
                                 text-sm'>
-                                <FaMapMarkedAlt className='text-green-700' />
+                                <FaMapMarkedAlt size='22px' className='text-green-700' />
                                     {Listing.address}
                             </p>
                             <div className='flex gap-4'>
-                                <p className='bg-red-900 
+                                <p className='bg-red-800 
                                     w-full p-1
+                                    uppercase
                                     max-w-[200px] 
                                     text-white 
                                     text-center
@@ -207,6 +218,19 @@ const Listing = () => {
                                     ) 
                                 }
                             </ul>
+                            {currentUser && Listing.userRef === currentUser._id && !contact && (
+                                <button
+                                    onClick={() => setContact(true)}
+                                    className='bg-slate-700 
+                                    text-white 
+                                    rounded-lg 
+                                    uppercase 
+                                    hover:opacity-95 
+                                    p-2'>
+                                    Contact landlord
+                                </button>
+                            )}
+                            {contact && <Contact Listing={Listing} />}
                         </div>
                     </div>
                 )
