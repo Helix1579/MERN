@@ -28,6 +28,8 @@ const ShowListing = () => {
             })
         }
         fetchListings();
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleDeleteListing = async (listingId) => {
@@ -80,7 +82,7 @@ const ShowListing = () => {
                         justify-between
                         items-center
                         gap-4'>
-                        <Link to={`/listing/${listing.userRef}`}>
+                        <Link to={`/listing/${listing._id}`}>
                             <img src={listing.imageUrls[0]} 
                                 alt={listing.title} 
                                 className='w-36 h-32

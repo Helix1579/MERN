@@ -77,3 +77,19 @@ export const getUserListings = async (req, res, next) => {
         next(errorHandler(401, 'Not Authorized'));
     }
 }
+
+export const getUser = async (req, res, next) => {
+    // console.log(req.user);
+
+    if (req.user.id === req.params.id)
+    {
+        try {
+            const user = await User.findById(req.params.id);
+            const { password, ...rest } = user._doc;
+            res.status(200).json(rest);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+}
