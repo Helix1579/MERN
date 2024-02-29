@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ListingItem from '../Components/ListingItem';
 
 const Search = () => {
 
@@ -16,6 +17,8 @@ const Search = () => {
     const [Loading, setLoading] = useState(false)
     const [Listings, setListings] = useState([])
     const navigate = useNavigate();
+
+    // console.log(Listings);
 
     const handleChange = (e) => {
         if (e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale') {
@@ -111,8 +114,8 @@ const Search = () => {
     return (
         <div className="flex 
             flex-col 
-            md:flex-row">
-            <div className='p-5 
+            sm:flex-row">
+            <div className='p-5
                 border-b-2
                 border-white
                 md:border-r-1
@@ -218,11 +221,32 @@ const Search = () => {
                     </button>
                 </form>
             </div>
-            <div className="">
+            <div className='flex-1'>
                 <h1 className='text-3xl
                     font-semibold
                     p-2 my-5 mx-5
-                    text-slate-700'>Search Results : </h1>
+                    text-slate-700'>Search Results : 
+                </h1>
+                <div className='p-7 flex
+                    flex-wrap gap-4'>
+                    { !Loading && Listings.length === 0 && (
+                        <p className='text-xl
+                            text-slate-700
+                            '>No Listings Found !</p>
+                    )}
+                    { Loading && (
+                        <p className='text-xl
+                            text-center
+                            text-slate-700
+                            w-full'>
+                            Loading...
+                        </p>
+                    )}
+
+                    {!Loading && Listings && Listings.map((listing) => (
+                        <ListingItem key={listing._id} Listing={listing} />
+                    ))}
+                </div>
             </div>
         </div>
     )
