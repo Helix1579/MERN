@@ -16,6 +16,7 @@ const Search = () => {
     })
     const [Loading, setLoading] = useState(false)
     const [Listings, setListings] = useState([])
+    const [ShowMore, setShowMore] = useState(false)
     const navigate = useNavigate();
 
     // console.log(Listings);
@@ -74,6 +75,7 @@ const Search = () => {
 
         const fetchData = async () => {
             setLoading(true);
+            setShowMore(false);
             const searchQuery = searchParams.toString();
 
             await axios
@@ -83,6 +85,14 @@ const Search = () => {
             })
             .then((res) => {
                 setListings(res.data);
+                // console.log(res.data.length);
+
+                if (res.data.length > 8) {
+                    setShowMore(true);
+                } else {
+                    setShowMore(false);
+                }
+
                 setLoading(false);
             })
             .catch((err) => {
@@ -110,16 +120,40 @@ const Search = () => {
         navigate(`/search?${searchQuery}`);
     }
 
+    const onShowMore = async () => {
+
+        const totalListings = Listings.length;
+        const startIndex = totalListings;
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('startIndex', startIndex);
+        const searchQuery = searchParams.toString();
+
+        await axios
+        .get(`http://localhost:3000/api/listing/get?${searchQuery}`,
+        {
+            withCredentials: true,
+        })
+        .then((res) => {
+            console.log(res.data);
+            if (res.data.length < 9)
+            {
+                setShowMore(false);
+            }
+            setListings([...Listings, ...res.data]);
+        })
+    }
+
 
     return (
         <div className="flex 
             flex-col 
             sm:flex-row">
             <div className='p-5
+                border-r-2
                 border-b-2
                 border-white
                 md:border-r-1
-                md:min-h-screen'>
+                '>
                 <form className='flex gap-6
                     flex-col'
                     onSubmit={handleSubmit}>
@@ -231,8 +265,9 @@ const Search = () => {
                     flex-wrap gap-4'>
                     { !Loading && Listings.length === 0 && (
                         <p className='text-xl
-                            text-slate-700
-                            '>No Listings Found !</p>
+                            text-slate-700'>
+                            No Listings Found !
+                        </p>
                     )}
                     { Loading && (
                         <p className='text-xl
@@ -246,6 +281,16 @@ const Search = () => {
                     {!Loading && Listings && Listings.map((listing) => (
                         <ListingItem key={listing._id} Listing={listing} />
                     ))}
+
+                    {ShowMore && (
+                        <button className='text-slate-600
+                            hover:underline
+                            p-2 w-full
+                            text-center'
+                            onClick={onShowMore}>
+                            Show More
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
