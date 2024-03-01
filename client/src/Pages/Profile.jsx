@@ -77,7 +77,7 @@ const Profile = () => {
 
         await axios
             .patch(
-                `http://localhost:3000/api/user/update/${currentUser._id}`,
+                `http://localhost:4000/api/user/update/${currentUser._id}`,
                 FormData,
                 {
                     withCredentials: true,
@@ -102,7 +102,7 @@ const Profile = () => {
 
         await axios
             .delete(
-                `http://localhost:3000/api/user/delete/${currentUser._id}`,
+                `http://localhost:4000/api/user/delete/${currentUser._id}`,
                 {
                     withCredentials: true,
                 }
@@ -121,7 +121,7 @@ const Profile = () => {
         dispatch(signOutUserStart());
 
         await axios
-            .get(`http://localhost:3000/api/auth/signout`, {
+            .get(`http://localhost:4000/api/auth/signout`, {
                 withCredentials: true,
             })
             .then((res) => {

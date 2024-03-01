@@ -25,7 +25,7 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3001'); // Replace this with the actual origin of your client application
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // Replace this with the actual origin of your client application
     res.header(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept'
@@ -48,8 +48,8 @@ app.use((req, res, next) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000 :)');
+app.listen(4000, () => {
+    console.log('Server is running on port 4000 :)');
 });
 
 app.get('/test', (req, res) => {

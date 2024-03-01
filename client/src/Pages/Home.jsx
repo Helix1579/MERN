@@ -22,7 +22,7 @@ const Home = () => {
         const OfferListingData = async () => {
             await axios
                 .get(
-                    `http://localhost:3000/api/listing/get?offer=true&limit=6`,
+                    `http://localhost:4000/api/listing/get?offer=true&limit=6`,
                     {
                         withCredentials: true,
                     }
@@ -38,7 +38,7 @@ const Home = () => {
         const SaleListingData = async () => {
             await axios
                 .get(
-                    `http://localhost:3000/api/listing/get?type=sale&limit=6`,
+                    `http://localhost:4000/api/listing/get?type=sale&limit=6`,
                     {
                         withCredentials: true,
                     }
@@ -54,7 +54,7 @@ const Home = () => {
         const RentListingData = async () => {
             await axios
                 .get(
-                    `http://localhost:3000/api/listing/get?type=rent&limit=6`,
+                    `http://localhost:4000/api/listing/get?type=rent&limit=6`,
                     {
                         withCredentials: true,
                     }

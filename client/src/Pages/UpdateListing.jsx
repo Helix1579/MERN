@@ -43,7 +43,7 @@ const UpdateListing = () => {
             const listingId = params.listingId;
 
             await axios
-                .get(`http://localhost:3000/api/listing/get/${listingId}`, {
+                .get(`http://localhost:4000/api/listing/get/${listingId}`, {
                     withCredentials: true,
                 })
                 .then((res) => {
@@ -176,7 +176,7 @@ const UpdateListing = () => {
 
         await axios
             .patch(
-                'http://localhost:3000/api/listing/update/' + params.listingId,
+                'http://localhost:4000/api/listing/update/' + params.listingId,
                 {
                     ...FormData,
                     userRef: currentUser._id,

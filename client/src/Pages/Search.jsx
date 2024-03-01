@@ -90,7 +90,7 @@ const Search = () => {
             const searchQuery = searchParams.toString();
 
             await axios
-                .get(`http://localhost:3000/api/listing/get?${searchQuery}`, {
+                .get(`http://localhost:4000/api/listing/get?${searchQuery}`, {
                     withCredentials: true,
                 })
                 .then((res) => {
@@ -138,7 +138,7 @@ const Search = () => {
         const searchQuery = searchParams.toString();
 
         await axios
-            .get(`http://localhost:3000/api/listing/get?${searchQuery}`, {
+            .get(`http://localhost:4000/api/listing/get?${searchQuery}`, {
                 withCredentials: true,
             })
             .then((res) => {

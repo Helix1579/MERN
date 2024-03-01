@@ -24,7 +24,7 @@ const SignUp = () => {
         setLoading(true);
 
         await axios
-            .post('http://localhost:3000/api/auth/signup', FormData)
+            .post('http://localhost:4000/api/auth/signup', FormData)
             .then(() => {
                 setLoading(false);
                 setError(null);

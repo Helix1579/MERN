@@ -13,7 +13,7 @@ const ShowListing = () => {
         const fetchListings = async () => {
             await axios
                 .get(
-                    `http://localhost:3000/api/user/listing/${currentUser._id}`,
+                    `http://localhost:4000/api/user/listing/${currentUser._id}`,
                     {
                         withCredentials: true,
                     }
@@ -38,7 +38,7 @@ const ShowListing = () => {
         try {
             await axios
                 .delete(
-                    `http://localhost:3000/api/listing/delete/${listingId}`,
+                    `http://localhost:4000/api/listing/delete/${listingId}`,
                     {
                         withCredentials: true,
                     }

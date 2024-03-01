@@ -37,7 +37,7 @@ const Listing = () => {
             setError(false);
 
             await axios
-                .get(`http://localhost:3000/api/listing/get/${listingId}`, {
+                .get(`http://localhost:4000/api/listing/get/${listingId}`, {
                     withCredentials: true,
                 })
                 .then((res) => {
