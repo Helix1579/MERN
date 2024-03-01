@@ -5,6 +5,7 @@ import userRoute from './Routes/UserRoute.js';
 import authRoute from './Routes/AuthRoute.js';
 import listingRoute from './Routes/ListingRoute.js';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ mongoose
     .catch((err) => {
         console.log('Error : ', err);
     });
+
+const __dirname = path.resolve();
 
 const app = express();
 
@@ -31,7 +34,7 @@ app.use((req, res, next) => {
         'Access-Control-Allow-Methods',
         'GET, POST, PUT, PATCH, DELETE, OPTIONS'
     );
-    res.header('Access-Control-Allow-Credentials', 'true');// Allow credentials
+    res.header('Access-Control-Allow-Credentials', 'true'); // Allow credentials
 
     // Respond to preflight requests
     if (req.method === 'OPTIONS') {
@@ -39,7 +42,6 @@ app.use((req, res, next) => {
             'Access-Control-Allow-Methods',
             'GET, POST, PUT, PATCH, DELETE, OPTIONS'
         );
-        // res.header('Access-Control-Allow-Methods', 'DELETE'); // Add PATCH method specifically for preflight requests
         res.sendStatus(200);
     } else {
         next();
@@ -61,6 +63,12 @@ app.use(cookieParser());
 app.use('/api/user', userRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/listing', listingRoute);
+
+app.use(express.static(path.join(__dirname, 'client/dist')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
