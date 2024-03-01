@@ -1,8 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
-import { app } from '../firebase'
-import { 
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+    getDownloadURL,
+    getStorage,
+    ref,
+    uploadBytesResumable,
+} from 'firebase/storage';
+import { app } from '../firebase';
+import {
     updateUserStart,
     updateUserSuccess,
     updateUserFailure,
@@ -12,28 +17,27 @@ import {
     signOutUserStart,
     signOutUserSuccess,
     signOutUserFailure,
-} from '../Redux/User/UserSlice'
-import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+} from '../Redux/User/UserSlice';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Profile = () => {
-
-    const { currentUser, loading, error } = useSelector((state) => state.user)
-    const fileRef = useRef(null)
-    const [File, setFile] = useState(undefined)
-    const [FilePercent, setFilePercent] = useState(0)
-    const [FileUpladError, setFileUpladError] = useState(false)
-    const [FormData, setFormData] = useState({})
-    const [UpdateSuccess, setUpdateSuccess] = useState(false)
-    const dispatch = useDispatch()
+    const { currentUser, loading, error } = useSelector((state) => state.user);
+    const fileRef = useRef(null);
+    const [File, setFile] = useState(undefined);
+    const [FilePercent, setFilePercent] = useState(0);
+    const [FileUpladError, setFileUpladError] = useState(false);
+    const [FormData, setFormData] = useState({});
+    const [UpdateSuccess, setUpdateSuccess] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (File) {
             handleFileUpload(File);
-        } 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [File])
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [File]);
 
     const handleFileUpload = (file) => {
         const storage = getStorage(app);
@@ -41,8 +45,11 @@ const Profile = () => {
         const storageRef = ref(storage, fileName);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
-        uploadTask.on('state_changed', (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setFilePercent(Math.round(progress));
             },
             (error) => {
@@ -50,18 +57,18 @@ const Profile = () => {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    setFormData({...FormData, avatar: downloadURL});
+                    setFormData({ ...FormData, avatar: downloadURL });
                 });
             }
-        )
-    }
+        );
+    };
 
     const handleChange = (e) => {
         setFormData({
             ...FormData,
-            [e.target.id]: e.target.value
+            [e.target.id]: e.target.value,
         });
-    }
+    };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -69,10 +76,13 @@ const Profile = () => {
         dispatch(updateUserStart());
 
         await axios
-            .patch(`http://localhost:3000/api/user/update/${currentUser._id}`,
-            FormData, {
-                withCredentials: true
-            })
+            .patch(
+                `http://localhost:3000/api/user/update/${currentUser._id}`,
+                FormData,
+                {
+                    withCredentials: true,
+                }
+            )
             .then((res) => {
                 console.log(res.data);
                 dispatch(updateUserSuccess(res.data));
@@ -82,8 +92,8 @@ const Profile = () => {
                 console.log(error.response);
                 setUpdateSuccess(false);
                 dispatch(updateUserFailure(error.response));
-            })
-    }
+            });
+    };
 
     const handleDelete = async (e) => {
         e.preventDefault();
@@ -91,10 +101,12 @@ const Profile = () => {
         dispatch(deleteUserStart());
 
         await axios
-            .delete(`http://localhost:3000/api/user/delete/${currentUser._id}`,
-            {
-                withCredentials: true
-            })
+            .delete(
+                `http://localhost:3000/api/user/delete/${currentUser._id}`,
+                {
+                    withCredentials: true,
+                }
+            )
             .then((res) => {
                 console.log(res);
                 dispatch(deleteUserSuccess());
@@ -102,16 +114,15 @@ const Profile = () => {
             .catch((error) => {
                 console.log(error);
                 dispatch(deleteUserFailure(error.response));
-            })
-    }
+            });
+    };
 
-    const handleSignOut = async() => {
-        
+    const handleSignOut = async () => {
         dispatch(signOutUserStart());
 
         await axios
             .get(`http://localhost:3000/api/auth/signout`, {
-                withCredentials: true
+                withCredentials: true,
             })
             .then((res) => {
                 console.log(res.data);
@@ -120,113 +131,147 @@ const Profile = () => {
             .catch((error) => {
                 console.log(error);
                 dispatch(signOutUserFailure(error.response));
-            })
-    }
-
+            });
+    };
 
     return (
         <div className='p-3 max-w-lg mx-auto'>
-            <h1 className=' text-3xl 
+            <h1
+                className=' text-3xl 
                 font-semibold 
                 text-center
                 uppercase
-                my-7'>
-                Profile</h1>
+                my-7'
+            >
+                Profile
+            </h1>
 
-            <form onSubmit={handleUpdate}
-                className='flex flex-col text-center gap-4'>
-
-                <input type='file' 
-                    ref={fileRef} hidden 
+            <form
+                onSubmit={handleUpdate}
+                className='flex flex-col text-center gap-4'
+            >
+                <input
+                    type='file'
+                    ref={fileRef}
+                    hidden
                     accept='image/*'
-                    onChange={(e) => setFile(e.target.files[0])}/>
+                    onChange={(e) => setFile(e.target.files[0])}
+                />
 
-                <img src={FormData.avatar || currentUser.avatar} alt="Profile" 
+                <img
+                    src={FormData.avatar || currentUser.avatar}
+                    alt='Profile'
                     className='rounded-full
                     h-40 w-40
                     object-cover
                     cursor-pointer
                     self-center
                     mt-2'
-                    onClick={() => fileRef.current.click()}/>
+                    onClick={() => fileRef.current.click()}
+                />
 
                 <p>
-                    { FileUpladError ? (
-                        <span className='text-red-600'> Error Uploading Image (Image must be less then 2MB) </span>
-                        ) :  FilePercent > 0 && FilePercent < 100 ? (
-                            <span className='text-green-600'>{`Uploading... ${FilePercent}%`}</span>
-                        ) : FilePercent === 100 ? (
-                            <span className='text-green-600'>Uploaded</span>
-                        ) : ( 
-                            "" 
-                        )
-                    }
+                    {FileUpladError ? (
+                        <span className='text-red-600'>
+                            {' '}
+                            Error Uploading Image (Image must be less then 2MB){' '}
+                        </span>
+                    ) : FilePercent > 0 && FilePercent < 100 ? (
+                        <span className='text-green-600'>{`Uploading... ${FilePercent}%`}</span>
+                    ) : FilePercent === 100 ? (
+                        <span className='text-green-600'>Uploaded</span>
+                    ) : (
+                        ''
+                    )}
                 </p>
-                
-                <input type="text"
+
+                <input
+                    type='text'
                     placeholder='Username'
                     id='username'
-                    defaultValue={currentUser.username} 
+                    defaultValue={currentUser.username}
                     onChange={handleChange}
-                    className='border p-2 pl-3 rounded-lg outline-none'/>
+                    className='border p-2 pl-3 rounded-lg outline-none'
+                />
 
-                <input type="text"
+                <input
+                    type='text'
                     placeholder='E-Mail'
                     id='email'
                     defaultValue={currentUser.email}
                     onChange={handleChange}
-                    className='border p-2 pl-3 rounded-lg outline-none'/>
+                    className='border p-2 pl-3 rounded-lg outline-none'
+                />
 
-                <input type="password"
+                <input
+                    type='password'
                     placeholder='Password'
                     id='password'
                     onChange={handleChange}
-                    className='border p-2 pl-3 rounded-lg outline-none'/>
+                    className='border p-2 pl-3 rounded-lg outline-none'
+                />
 
-                <button 
-                    disabled={loading} 
+                <button
+                    disabled={loading}
                     className='bg-slate-600 
                     text-white
                     uppercase
                     rounded-lg p-1
                     hover:opacity-95
-                    disabled:opacity-80'>
-                        {loading ? "Loading..." : "Update"}
+                    disabled:opacity-80'
+                >
+                    {loading ? 'Loading...' : 'Update'}
                 </button>
-                <Link to={'/createListing'}
+                <Link
+                    to={'/createListing'}
                     className='bg-green-600 
                     text-white
                     uppercase
                     rounded-lg p-1
                     hover:opacity-95
-                    disabled:opacity-80'>
-                        Create Listing
+                    disabled:opacity-80'
+                >
+                    Create Listing
                 </Link>
-                <Link to={'/userListing'}
+                <Link
+                    to={'/userListing'}
                     className='bg-green-600 
                     text-white
                     uppercase
                     rounded-lg p-1
                     hover:opacity-95
-                    disabled:opacity-80'>
-                        Show Listings
-            </Link>
+                    disabled:opacity-80'
+                >
+                    Show Listings
+                </Link>
             </form>
 
             <div className='flex justify-between mt-5'>
-                <span onClick={handleDelete} className='text-red-600
-                    cursor-pointer'>Delete Account?</span>
-                <span onClick={handleSignOut} className='text-red-600
-                    cursor-pointer'>Sign Out</span>
+                <span
+                    onClick={handleDelete}
+                    className='text-red-600
+                    cursor-pointer'
+                >
+                    Delete Account?
+                </span>
+                <span
+                    onClick={handleSignOut}
+                    className='text-red-600
+                    cursor-pointer'
+                >
+                    Sign Out
+                </span>
             </div>
 
-            {UpdateSuccess && <p className='text-center mt-5 text-green-600'>Profile Updated</p>}
+            {UpdateSuccess && (
+                <p className='text-center mt-5 text-green-600'>
+                    Profile Updated
+                </p>
+            )}
 
             {error && <p className='text-center mt-5 text-red-600'>{error}</p>}
-            
-
         </div>
-    )
-}
+    );
+};
 
-export default Profile
+export default Profile;
