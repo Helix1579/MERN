@@ -10,6 +10,10 @@ import { MdDeleteForever, MdOutlineUploadFile } from 'react-icons/md';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Input from '../Components/Reuseable/Input';
+import CheckBox from '../Components/Reuseable/CheckBox';
+import ChangeableNumber from '../Components/Reuseable/ChangeableNumber';
+import UploadButton from '../Components/Reuseable/UploadButton';
 
 const CreateListing = () => {
     const [Files, setFiles] = useState([]);
@@ -34,7 +38,7 @@ const CreateListing = () => {
     const [Loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // console.log(FormData);
+    console.log(FormData);
 
     const handleUpload = async (e) => {
         if (Files.length > 0 && Files.length + FormData.imageUrls.length < 7) {
@@ -105,34 +109,38 @@ const CreateListing = () => {
         });
     };
 
-    const handleChange = (e) => {
+    // console.log(FormData);
+
+    const handleTypeChange = (e) => {
         if (e.target.id === 'sale' || e.target.id === 'rent') {
             setFormData({
                 ...FormData,
                 type: e.target.id,
             });
         }
-        if (
-            e.target.id === 'parking' ||
-            e.target.id === 'furnished' ||
-            e.target.id === 'offer'
-        ) {
-            setFormData({
-                ...FormData,
-                [e.target.id]: e.target.checked,
-            });
-        }
-        if (
-            e.target.type === 'number' ||
-            e.target.type === 'text' ||
-            e.target.type === 'textarea'
-        ) {
-            setFormData({
-                ...FormData,
-                [e.target.id]: e.target.value,
-            });
-        }
     };
+
+    const handleAmenitiesChange = (e) => {
+        setFormData({
+            ...FormData,
+            [e.target.id]: e.target.checked,
+        });
+    };
+
+    const handleNumberChange = (e) => {
+        setFormData({
+            ...FormData,
+            [e.target.id]: e.target.value,
+        });
+    };
+
+    const handleDataChange = (e) =>
+    {
+        setFormData({
+            ...FormData,
+            [e.target.id]: e.target.value,
+        });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -197,17 +205,12 @@ const CreateListing = () => {
                     className='flex flex-col
                     gap-3 flex-1'
                 >
-                    <input
-                        required
-                        type='text'
+                    <Input
                         placeholder='Name'
-                        className='border p-2
-                            rounded-lg
-                            outline-none'
                         id='name'
                         maxLength='62'
                         minLength='10'
-                        onChange={handleChange}
+                        onChange={handleDataChange}
                         value={FormData.name}
                     />
                     <textarea
@@ -216,145 +219,92 @@ const CreateListing = () => {
                         placeholder='Description'
                         className='border p-2 h-32
                             rounded-lg
-                            outline-none'
+                            outline-none
+                            items-start'
                         id='description'
-                        onChange={handleChange}
+                        onChange={handleDataChange}
                         value={FormData.description}
                     />
-                    <input
-                        required
-                        type='text'
+                    <Input
                         placeholder='Address'
-                        className='border p-2
-                            rounded-lg
-                            outline-none'
                         id='address'
-                        onChange={handleChange}
+                        onChange={handleDataChange}
                         value={FormData.address}
                     />
 
                     <div className='flex gap-6 flex-wrap'>
-                        <div className='flex gap-1'>
-                            <input
-                                type='checkbox'
-                                id='sale'
-                                className='w-4'
-                                onChange={handleChange}
-                                checked={FormData.type === 'sale'}
-                            />
-                            <span>Sell</span>
-                        </div>
-                        <div className='flex gap-1'>
-                            <input
-                                type='checkbox'
-                                id='rent'
-                                className='w-4'
-                                onChange={handleChange}
-                                checked={FormData.type === 'rent'}
-                            />
-                            <span>Rent</span>
-                        </div>
-                        <div className='flex gap-1'>
-                            <input
-                                type='checkbox'
-                                id='parking'
-                                className='w-4'
-                                onChange={handleChange}
-                                checked={FormData.parking}
-                            />
-                            <span>Parking Spot</span>
-                        </div>
-                        <div className='flex gap-1'>
-                            <input
-                                type='checkbox'
-                                id='furnished'
-                                className='w-4'
-                                onChange={handleChange}
-                                checked={FormData.furnished}
-                            />
-                            <span>Furnished</span>
-                        </div>
-                        <div className='flex gap-1'>
-                            <input
-                                type='checkbox'
-                                id='offer'
-                                className='w-4'
-                                onChange={handleChange}
-                                checked={FormData.offer}
-                            />
-                            <span>Offer</span>
-                        </div>
+                        <CheckBox
+                            id='sale'
+                            name='Sell'
+                            onChange={handleTypeChange}
+                            checked={FormData.type === 'sale'}
+                        />
+
+                        <CheckBox
+                            id='rent'
+                            name='Rent'
+                            onChange={handleTypeChange}
+                            checked={FormData.type === 'rent'}
+                        />
+
+                        <CheckBox
+                            id='parking'
+                            name='Parking'
+                            onChange={handleAmenitiesChange}
+                            checked={FormData.parking}
+                        />
+
+                        <CheckBox
+                            id='furnished'
+                            name='Furnished'
+                            onChange={handleAmenitiesChange}
+                            checked={FormData.furnished}
+                        />
+
+                        <CheckBox
+                            id='offer'
+                            name='Offer'
+                            onChange={handleAmenitiesChange}
+                            checked={FormData.offer}
+                        />
                     </div>
 
                     <div className='flex gap-6 flex-wrap text-sm'>
-                        <div className='flex gap-1 items-center'>
-                            <input
-                                required
-                                type='number'
-                                min='1'
-                                max='10'
-                                className='p-1 w-12
-                                    rounded-xl
-                                    outline-none
-                                    text-center'
-                                id='bedrooms'
-                                onChange={handleChange}
-                                value={FormData.bedrooms}
-                            />
-                            <p>Beds</p>
-                        </div>
-                        <div className='flex gap-1 items-center'>
-                            <input
-                                required
-                                type='number'
-                                min='1'
-                                max='10'
-                                className='p-1 w-12
-                                    rounded-xl
-                                    outline-none
-                                    text-center'
-                                id='bathrooms'
-                                onChange={handleChange}
-                                value={FormData.bathrooms}
-                            />
-                            <p>Baths</p>
-                        </div>
-                        <div className='flex gap-1 items-center'>
-                            <input
-                                required
-                                type='number'
-                                className='p-1 w-28
-                                    rounded-xl
-                                    outline-none
-                                    text-center'
-                                id='regularPrice'
-                                onChange={handleChange}
-                                value={FormData.regularPrice}
-                            />
-                            <div className='text-center'>
-                                <p>Regular Price</p>
-                                <span className='text-xs'>($ / Month)</span>
-                            </div>
-                        </div>
+                        <ChangeableNumber
+                            name='Bedrooms'
+                            min
+                            max
+                            id='bedrooms'
+                            onChange={handleNumberChange}
+                            value={FormData.bedrooms}
+                        />
+                        <ChangeableNumber
+                            name='Bathrooms'
+                            min
+                            max
+                            id='bathrooms'
+                            onChange={handleNumberChange}
+                            value={FormData.bathrooms}
+                        />
+
+                        <ChangeableNumber
+                            price
+                            min
+                            name='Regular Price'
+                            id='regularPrice'
+                            onChange={handleNumberChange}
+                            value={FormData.regularPrice}
+                        />
 
                         {FormData.offer && (
-                            <div className='flex gap-1 items-center'>
-                                <input
-                                    required
-                                    type='number'
-                                    className='p-1 w-28
-                                        rounded-xl
-                                        outline-none
-                                        text-center'
-                                    id='discountPrice'
-                                    onChange={handleChange}
-                                    value={FormData.discountPrice}
-                                />
-                                <div className='text-center'>
-                                    <p>Discount Price</p>
-                                    <span className='text-xs'>($ / Month)</span>
-                                </div>
-                            </div>
+                            <ChangeableNumber
+                                price
+                                min
+                                name='Discount Price'
+                                id='discountPrice'
+                                onChange={handleNumberChange}
+                                value={FormData.discountPrice}
+                            />
                         )}
                     </div>
                 </div>
@@ -383,29 +333,11 @@ const CreateListing = () => {
                                 border-gray-600 
                                 w-full'
                         />
-                        <button
-                            type='button'
+
+                        <UploadButton
                             onClick={handleUpload}
                             disabled={Uploading}
-                            className='p-2 mt-4
-                                w-full
-                                text-green-500
-                                rounded-lg
-                                border 
-                                border-green-600
-                                uppercase
-                                hover:shadow-lg
-                                disabled:opacity-80'
-                        >
-                            {Uploading ? (
-                                'Uploading...'
-                            ) : (
-                                <MdOutlineUploadFile
-                                    size='24px'
-                                    className='w-full'
-                                />
-                            )}
-                        </button>
+                        />
                     </div>
                     <p className='text-red-600'>
                         {ImageUploadError && ImageUploadError}
