@@ -1,67 +1,63 @@
-import Listing from "../Models/ListingModel.js";
+import Listing from '../Models/ListingModel.js';
 
 export const createListing = async (req, res, next) => {
     // console.log(req.user);
     console.log(req.body);
 
-    try
-    {
+    try {
         const listing = await Listing.create(req.body);
         res.status(201).json(listing);
-
     } catch (error) {
         next(error);
     }
-}
+};
 
 export const deleteListing = async (req, res, next) => {
     if (!(await Listing.findById(req.params.id))) {
-        return res.status(404).json("Listing not found");
+        return res.status(404).json('Listing not found');
     }
-    try
-    {
+    try {
         await Listing.findByIdAndDelete(req.params.id);
-        res.status(200).json("Listing has been deleted");
-
+        res.status(200).json('Listing has been deleted');
     } catch (error) {
         next(error);
     }
-}
+};
 
 export const updateListing = async (req, res, next) => {
     if (!(await Listing.findById(req.params.id))) {
-        return res.status(404).json("Listing not found");
+        return res.status(404).json('Listing not found');
     }
-    try
-    {
-        const listing = await Listing.findByIdAndUpdate(req.params.id, {
-            $set: req.body,
-        }, { new: true });
+    try {
+        const listing = await Listing.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: req.body,
+            },
+            { new: true }
+        );
         res.status(200).json(listing);
-
     } catch (error) {
         next(error);
     }
-}
+};
 
 export const getListing = async (req, res, next) => {
     if (!(await Listing.findById(req.params.id))) {
-        return res.status(404).json("Listing not found");
+        return res.status(404).json('Listing not found');
     }
-    try
-    {
+    try {
         const listing = await Listing.findById(req.params.id);
         res.status(200).json(listing);
     } catch (error) {
         next(error);
     }
-}
+};
 
 export const getListings = async (req, res, next) => {
     console.log(req.query);
 
-    try
-    {
+    try {
         const limit = parseInt(req.query.limit) || 10;
         const startIndex = parseInt(req.query.startIndex) || 0;
 
@@ -79,7 +75,7 @@ export const getListings = async (req, res, next) => {
         if (parking === undefined || parking === 'false') {
             parking = { $in: [false, true] };
         }
-        
+
         let type = req.query.type;
         if (type === undefined || type === 'all') {
             type = { $in: ['sale', 'rent'] };
@@ -96,13 +92,12 @@ export const getListings = async (req, res, next) => {
             parking,
             type,
         })
-        .sort({ [sort]: order })
-        .limit(limit)
-        .skip(startIndex);
-        
+            .sort({ [sort]: order })
+            .limit(limit)
+            .skip(startIndex);
+
         res.status(200).json(listings);
-        
     } catch (error) {
         next(error);
     }
-}
+};
