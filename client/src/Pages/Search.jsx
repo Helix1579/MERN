@@ -20,7 +20,7 @@ const Search = () => {
 
     // console.log(Listings);
 
-    const handleChange = (e) => {
+    const handleType = (e) => {
         if (
             e.target.id === 'all' ||
             e.target.id === 'rent' ||
@@ -29,29 +29,26 @@ const Search = () => {
             setFilterData({ ...FilterData, type: e.target.id });
         }
 
+    };
+    const handleSearch = (e) => {
+
         if (e.target.id === 'search') {
             setFilterData({ ...FilterData, search: e.target.value });
         }
+    }
 
-        if (
-            e.target.id === 'parking' ||
-            e.target.id === 'furnished' ||
-            e.target.id === 'offer'
-        ) {
-            setFilterData({
-                ...FilterData,
-                [e.target.id]:
-                    e.target.checked || e.target.checked === 'true'
-                        ? true
-                        : false,
-            });
-        }
+    const handleAmenities = (e) => {
+        setFilterData({
+            ...FilterData,
+            [e.target.id]:
+                e.target.checked || e.target.checked === 'true' ? true : false,
+        });
+    };
 
-        if (e.target.id === 'sort') {
-            const sort = e.target.value.split('_')[0] || 'created_At';
-            const order = e.target.value.split('_')[1] || 'desc';
-            setFilterData({ ...FilterData, sort, order });
-        }
+    const handleSort = (e) => {
+        const sort = e.target.value.split('_')[0] || 'created_At';
+        const order = e.target.value.split('_')[1] || 'desc';
+        setFilterData({ ...FilterData, sort, order });
     };
 
     useEffect(() => {
@@ -152,17 +149,18 @@ const Search = () => {
 
     return (
         <div
-            className='flex 
-            flex-col 
+            className='flex
+            flex-col
             sm:flex-row'
         >
+            {/* Left Div */}
             <div
                 className='p-5
                 border-r-2
                 border-b-2
                 border-white
                 md:border-r-1
-                '
+                fixed'
             >
                 <form
                     className='flex gap-6
@@ -189,7 +187,7 @@ const Search = () => {
                                 p-1 w-full
                                 outline-none'
                             value={FilterData.search}
-                            onChange={handleChange}
+                            onChange={handleSearch}
                         />
                     </div>
                     <div
@@ -203,7 +201,7 @@ const Search = () => {
                                 type='checkbox'
                                 id='all'
                                 className='w-5'
-                                onChange={handleChange}
+                                onChange={handleType}
                                 checked={FilterData.type === 'all'}
                             />
                             <span> Rent & Sale </span>
@@ -213,7 +211,7 @@ const Search = () => {
                                 type='checkbox'
                                 id='rent'
                                 className='w-5'
-                                onChange={handleChange}
+                                onChange={handleType}
                                 checked={FilterData.type === 'rent'}
                             />
                             <span> Rent </span>
@@ -223,7 +221,7 @@ const Search = () => {
                                 type='checkbox'
                                 id='sale'
                                 className='w-5'
-                                onChange={handleChange}
+                                onChange={handleType}
                                 checked={FilterData.type === 'sale'}
                             />
                             <span> Sale </span>
@@ -233,7 +231,7 @@ const Search = () => {
                                 type='checkbox'
                                 id='offer'
                                 className='w-5'
-                                onChange={handleChange}
+                                onChange={handleAmenities}
                                 checked={FilterData.offer}
                             />
                             <span> Offer </span>
@@ -251,7 +249,7 @@ const Search = () => {
                                 type='checkbox'
                                 id='furnished'
                                 className='w-5'
-                                onChange={handleChange}
+                                onChange={handleAmenities}
                                 checked={FilterData.furnished}
                             />
                             <span> Furnished </span>
@@ -261,7 +259,7 @@ const Search = () => {
                                 type='checkbox'
                                 id='parking'
                                 className='w-5'
-                                onChange={handleChange}
+                                onChange={handleAmenities}
                                 checked={FilterData.parking}
                             />
                             <span> Parking </span>
@@ -278,7 +276,7 @@ const Search = () => {
                             id='sort'
                             className='rounded-lg 
                             outline-none p-1'
-                            onChange={handleChange}
+                            onChange={handleSort}
                         >
                             defaultValue={'created_At_desc'}
                             <option value='regularPrice_desc'>
@@ -306,6 +304,9 @@ const Search = () => {
                     </button>
                 </form>
             </div>
+
+            {/* Right Div */}
+            
             <div className='flex-1'>
                 <h1
                     className='text-3xl
