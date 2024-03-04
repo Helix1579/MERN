@@ -32,7 +32,7 @@ const Header = () => {
             className='bg-slate-200 
                 shadow-md 
                 w-full z-50
-                sticky top-0 
+                fixed top-0 
                 inset-x-0'
         >
             <div
@@ -100,7 +100,7 @@ const Header = () => {
                         </li>
                     </Link>
 
-                    {currentUser ? (
+                    {currentUser && (
                         <Link to='/userListing'>
                             <li
                                 className='
@@ -112,8 +112,6 @@ const Header = () => {
                                 MyListing{' '}
                             </li>
                         </Link>
-                    ) : (
-                        ''
                     )}
 
                     <Link to='/profile'>

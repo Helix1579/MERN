@@ -98,21 +98,25 @@ const Home = () => {
 
                 <div
                     className='text-gray-500
-                    pl-6
-                    text-sm
+                    text-sm pt-3
+                    flex flex-col
+                    items-center
                     sm:text-sm'
                 >
-                    Felix Estate is the best place to find your next perfect
-                    place to live.
-                    <br /> We have a wide range of properties for you to choose
-                    from.
+                    <p>
+                        Felix Estate is the best place to find your next perfect
+                        place to live.
+                    </p>
+                    <p>
+                        We have a wide range of properties for you to choose
+                        from.
+                    </p>
                 </div>
 
                 <Link
                     to={'/search'}
                     className='text-sm
                     sm:text-sm
-                    pl-6
                     text-blue-600
                     font-bold
                     hover:underline'
