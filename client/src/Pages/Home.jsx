@@ -7,6 +7,7 @@ import 'swiper/css/bundle';
 import axios from 'axios';
 import ListingItem from '../Components/ListingItem';
 import { RxDoubleArrowRight } from 'react-icons/rx';
+import Header from '../Components/Header';
 
 const Home = () => {
     const [OfferListings, setOfferListings] = useState([]);
@@ -71,15 +72,18 @@ const Home = () => {
         SaleListingData();
         RentListingData();
     }, []);
+
     return (
-        <div className=''>
+        <div>
+            {/* <Header /> */}
             {/* top */}
             <div
                 className='flex
                 flex-col
+                items-center
                 gap-5 p-28
-                px-3 max-w-6xl
-                mx-auto'
+                mx-auto
+                px-3 max-w-6xl'
             >
                 <h1
                     className='text-slate-700
@@ -94,6 +98,7 @@ const Home = () => {
 
                 <div
                     className='text-gray-500
+                    pl-6
                     text-sm
                     sm:text-sm'
                 >
@@ -107,6 +112,7 @@ const Home = () => {
                     to={'/search'}
                     className='text-sm
                     sm:text-sm
+                    pl-6
                     text-blue-600
                     font-bold
                     hover:underline'

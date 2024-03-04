@@ -30,15 +30,17 @@ const Header = () => {
     return (
         <header
             className='bg-slate-200 
-                shadow-md'
+                shadow-md 
+                w-full z-50
+                sticky top-0 
+                inset-x-0'
         >
             <div
                 className='flex
                 justify-between
                 items-center 
                 max-w-6xl 
-                p-3
-                mx-auto'
+                p-3 mx-auto'
             >
                 <Link to='/'>
                     <h1
