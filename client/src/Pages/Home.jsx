@@ -7,7 +7,6 @@ import 'swiper/css/bundle';
 import axios from 'axios';
 import ListingItem from '../Components/ListingItem';
 import { RxDoubleArrowRight } from 'react-icons/rx';
-import Header from '../Components/Header';
 
 const Home = () => {
     const [OfferListings, setOfferListings] = useState([]);

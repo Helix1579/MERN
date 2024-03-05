@@ -150,7 +150,7 @@ const Search = () => {
     return (
         <div
             className='flex
-            flex-col
+            flex-col 
             sm:flex-row'
         >
             {/* Left Div */}
@@ -159,12 +159,11 @@ const Search = () => {
                 border-r-2
                 border-b-2
                 border-white
-                md:border-r-1
-                fixed'
+                md:border-r-1'
             >
                 <form
                     className='flex gap-6
-                    flex-col'
+                    flex-col sticky top-20'
                     onSubmit={handleSubmit}
                 >
                     <div
@@ -306,7 +305,7 @@ const Search = () => {
             </div>
 
             {/* Right Div */}
-            
+
             <div className='flex-1'>
                 <h1
                     className='text-3xl
