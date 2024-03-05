@@ -30,15 +30,17 @@ const Header = () => {
     return (
         <header
             className='bg-slate-200 
-                shadow-md'
+                shadow-md 
+                w-full z-50
+                fixed top-0 
+                inset-x-0'
         >
             <div
                 className='flex
                 justify-between
                 items-center 
                 max-w-6xl 
-                p-3
-                mx-auto'
+                p-3 mx-auto'
             >
                 <Link to='/'>
                     <h1
@@ -98,7 +100,7 @@ const Header = () => {
                         </li>
                     </Link>
 
-                    {currentUser ? (
+                    {currentUser && (
                         <Link to='/userListing'>
                             <li
                                 className='
@@ -110,8 +112,6 @@ const Header = () => {
                                 MyListing{' '}
                             </li>
                         </Link>
-                    ) : (
-                        ''
                     )}
 
                     <Link to='/profile'>

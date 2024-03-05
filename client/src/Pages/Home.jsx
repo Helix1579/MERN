@@ -71,15 +71,18 @@ const Home = () => {
         SaleListingData();
         RentListingData();
     }, []);
+
     return (
-        <div className=''>
+        <div>
+            {/* <Header /> */}
             {/* top */}
             <div
                 className='flex
                 flex-col
+                items-center
                 gap-5 p-28
-                px-3 max-w-6xl
-                mx-auto'
+                mx-auto
+                px-3 max-w-6xl'
             >
                 <h1
                     className='text-slate-700
@@ -94,13 +97,19 @@ const Home = () => {
 
                 <div
                     className='text-gray-500
-                    text-sm
+                    text-sm pt-3
+                    flex flex-col
+                    items-center
                     sm:text-sm'
                 >
-                    Felix Estate is the best place to find your next perfect
-                    place to live.
-                    <br /> We have a wide range of properties for you to choose
-                    from.
+                    <p>
+                        Felix Estate is the best place to find your next perfect
+                        place to live.
+                    </p>
+                    <p>
+                        We have a wide range of properties for you to choose
+                        from.
+                    </p>
                 </div>
 
                 <Link

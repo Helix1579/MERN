@@ -16,23 +16,26 @@ function App() {
     return (
         <BrowserRouter>
             <Header />
-            <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/sign-in' element={<SignIn />} />
-                <Route path='/sign-up' element={<SignUp />} />
-                <Route path='/about' element={<About />} />
-                <Route path='/listing/:listingId' element={<Listing />} />
-                <Route path='/search' element={<Search />} />
-                <Route element={<PrivateRoute />}>
-                    <Route path='/profile' element={<Profile />} />
-                    <Route path='/createListing' element={<CreateListing />} />
-                    <Route
-                        path='/updateListing/:listingId'
-                        element={<UpdateListing />}
-                    />
-                    <Route path='/userListing' element={<ShowListing />} />
-                </Route>
-            </Routes>
+            <div className='pt-14'>
+
+                <Routes>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/sign-in' element={<SignIn />} />
+                    <Route path='/sign-up' element={<SignUp />} />
+                    <Route path='/about' element={<About />} />
+                    <Route path='/listing/:listingId' element={<Listing />} />
+                    <Route path='/search' element={<Search />} />
+                    <Route element={<PrivateRoute />}>
+                        <Route path='/profile' element={<Profile />} />
+                        <Route path='/createListing' element={<CreateListing />} />
+                        <Route
+                            path='/updateListing/:listingId'
+                            element={<UpdateListing />}
+                        />
+                        <Route path='/userListing' element={<ShowListing />} />
+                    </Route>
+                </Routes>
+            </div>
         </BrowserRouter>
     );
 }
